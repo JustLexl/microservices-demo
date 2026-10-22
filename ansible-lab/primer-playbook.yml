@@ -1,0 +1,25 @@
+- name: Mi primer playbook2
+  hosts: local
+  become: true
+  vars:
+    carpeta: /opt/fase3
+  tasks:
+    - name: Instalar paquetes basicos
+      ansible.builtin.apt:
+        name: [tree, curl, unzip, jq]
+        state: present
+        update_cache: true
+
+    - name: Crear carpeta de trabajo si
+      ansible.builtin.file:
+        path: "{{ carpeta }}"
+        state: directory
+        mode: "0755"
+
+    - name: Escribir archivo de info
+      ansible.builtin.copy:
+        dest: "{{ carpeta }}/info.txt"
+        content: |
+          Host: {{ ansible_hostname }}
+          SO: {{ ansible_distribution }} {{ ansible_distribution_version }}
+          Configurado por Ansible

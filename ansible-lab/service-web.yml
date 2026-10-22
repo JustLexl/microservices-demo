@@ -1,0 +1,47 @@
+- name: Levantar un servicio web con Ansible
+  hosts: local
+  become: true
+  tasks:
+    - name: Instalar nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+
+    - name: Crear carpeta del sitio
+      ansible.builtin.file:
+        path: "{{ sitio_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Generar pagina desde template
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: "{{ sitio_dir }}/index.html"
+        mode: "0644"
+
+    - name: Generar configuracion del sitio desde template
+      ansible.builtin.template:
+        src: fase3.conf.j2
+        dest: /etc/nginx/sites-available/fase3.conf
+        mode: "0644"
+      notify: Reiniciar nginx
+
+    - name: Habilitar el sitio
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/fase3.conf
+        dest: /etc/nginx/sites-enabled/fase3.conf
+        state: link
+      notify: Reiniciar nginx
+
+    - name: Asegurar que nginx este corriendo y arranque solo
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+  handlers:
+    - name: Reiniciar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

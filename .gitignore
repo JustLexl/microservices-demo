@@ -27,3 +27,13 @@ pkg/
 release/wi-kubernetes-manifests.yaml
 vendor/
 gha-creds-*.json
+# Archivos sensibles que NUNCA deben ir al repositorio
+vault-llaves.txt
+*.tfstate
+*.tfstate.*
+.terraform/
+fase3-vault
+fase3-vault.pem
+fase3-vault.id_rsa
+*.pem
+credentials

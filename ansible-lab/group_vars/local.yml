@@ -1,0 +1,4 @@
+puerto_web: 8090
+sitio_dir: /var/www/fase3
+titulo: "Fase III - Ansible"
+mensaje: "Este servidor lo configuro Ansible, nadie le metio mano"
